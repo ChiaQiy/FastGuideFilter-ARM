@@ -5,7 +5,7 @@
 #include "fastguidefilter.hpp"
 
 
-void BoxFilter::filter_0(float* src, float* dst, int r) {
+void FastGuideFilter::filter_0(float* src, float* dst, int r) {
     for (int h=0; h<height; h++) {
         for (int w=0; w<width; w++) {
             //border: 00000
@@ -26,7 +26,7 @@ void BoxFilter::filter_0(float* src, float* dst, int r) {
 
 }
 
-void BoxFilter::filter_1(float* src, float* dst, int r) {
+void FastGuideFilter::filter_1(float* src, float* dst, int r) {
     //horizon
     float* cachePtr = &(cache[0]);
     for (int h = 0; h < height; h++) {
@@ -58,7 +58,7 @@ void BoxFilter::filter_1(float* src, float* dst, int r) {
     }
 }
 
-void BoxFilter::filter_2(float* src, float* dst, int r) {
+void FastGuideFilter::filter_2(float* src, float* dst, int r) {
     //horizon
     float* cachePtr = &(cache[0]);
     for (int h = 0; h < height; h++) {
@@ -130,7 +130,7 @@ void BoxFilter::filter_2(float* src, float* dst, int r) {
     }
 }
 
-void BoxFilter::filter_3(float* src, float* dst, int r) {
+void FastGuideFilter::filter_3(float* src, float* dst, int r) {
     //horizon
     float* cachePtr = &(cache[0]);
     for (int h = 0; h < height; h++) {
@@ -227,4 +227,24 @@ void BoxFilter::filter_3(float* src, float* dst, int r) {
             dst[shift + w] = colSumPtr[w];
         }
     }
+}
+
+void FastGuideFilter::resizeDown4x_0(float *src, float *dst)
+{
+    //interp: nearest
+    const float* ptr = src;
+    float* outptr = dst;
+    int out_height = height >> 2;
+    int out_width = width >> 2;
+    for (int h = 0; h < out_height; h++) {
+        for (int w = 0; w < out_width; w++) {
+            outptr[h * out_width + w] = ptr[(h << 2) * width + (w << 2)];
+        }
+    }
+}
+
+void FastGuideFilter::resizeUp4x_0(float *src, float *dst)
+{
+    //interp: linear
+
 }
